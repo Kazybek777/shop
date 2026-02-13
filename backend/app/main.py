@@ -38,6 +38,7 @@ def root():
         "docs": "api/docs",
     }
 
+
 @app.get('/health')
 def health_check():
     return {'status': 'healthy'}
