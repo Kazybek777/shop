@@ -76,7 +76,7 @@ coverage
 *.sln
 *.sw?
 shop.db
-
+backend/static/images
 *.tsbuildinfo
 .vscode
 celerybeat-schedule

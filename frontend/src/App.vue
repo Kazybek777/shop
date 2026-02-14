@@ -1,85 +1,84 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div id="app" class="app-shell">
+    <div class="ambient-dot ambient-dot--left"></div>
+    <div class="ambient-dot ambient-dot--right"></div>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <Header />
+    <RouterView />
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
+    <footer class="site-footer">
+      <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="grid gap-5 md:grid-cols-2 md:items-end">
+          <div>
+            <p class="font-semibold text-[color:var(--ink-700)]">{{ t('footer.title') }}</p>
+            <p class="text-sm text-[color:var(--ink-500)] mt-2 max-w-2xl">{{ t('footer.subtitle') }}</p>
+          </div>
 
-  <RouterView />
+          <div class="md:text-right">
+            <p class="text-sm font-semibold text-[color:var(--ink-700)] mb-2">{{ t('footer.follow') }}</p>
+            <div class="inline-flex flex-wrap gap-2 md:justify-end">
+              <a class="social-link" href="https://t.me/tashtemir" target="_blank" rel="noopener noreferrer">
+                {{ t('footer.telegram') }}
+              </a>
+              <a class="social-link" href="https://wa.me/996000000000" target="_blank" rel="noopener noreferrer">
+                {{ t('footer.whatsapp') }}
+              </a>
+              <a class="social-link" href="https://www.youtube.com/@tashtemir" target="_blank" rel="noopener noreferrer">
+                {{ t('footer.youtube') }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
 </template>
 
+<script setup>
+import { watch } from 'vue'
+import { useRoute, RouterView } from 'vue-router'
+import Header from '@/components/Header.vue'
+import { useI18n } from '@/composables/useI18n'
+
+const route = useRoute()
+const { locale, t } = useI18n()
+
+const titleByRoute = {
+  home: 'meta.home',
+  'product-detail': 'meta.product',
+  cart: 'meta.cart',
+  checkout: 'meta.checkout',
+  login: 'meta.login',
+  register: 'meta.register',
+  admin: 'meta.admin',
+}
+
+watch(
+  [() => route.name, locale],
+  () => {
+    const key = titleByRoute[String(route.name)] || 'meta.home'
+    document.title = t(key)
+  },
+  { immediate: true },
+)
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  padding: 0.34rem 0.78rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--ink-700);
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.social-link:hover {
+  border-color: var(--line-strong);
+  color: var(--ink-900);
+  background: #fff;
 }
 </style>
